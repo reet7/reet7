@@ -1,0 +1,55 @@
+.home {
+  position: relative; height: 100vh; height: 100svh; overflow: hidden;
+  touch-action: none; overscroll-behavior: none;
+}
+
+.stage { position: absolute; inset: 0; z-index: 1; }
+.card {
+  position: absolute; left: 50%; top: 0; width: var(--card-w, 20rem); height: var(--card-h, 14rem);
+  will-change: transform, width, height;
+  transform-origin: 50% 50%;
+}
+.card-link { display: block; width: 100%; height: 100%; overflow: hidden; position: relative; background: #151515; }
+.card .cover-svg, .card .cover-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.card .cover-svg { transition: filter 0.6s var(--ease-out); }
+.card:not(.is-active) .cover-svg, .card:not(.is-active) .cover-img { filter: grayscale(1) brightness(0.55) contrast(1.05); }
+.card-link:focus-visible { outline-offset: 4px; }
+.has-gl .card .card-link { background: transparent; }
+.has-gl .card .cover-svg, .has-gl .card .cover-img { opacity: 0; }
+
+.work-line {
+  position: absolute; left: 0; right: 0; top: var(--line-y, 61%);
+  height: 1px; background: var(--c-line); z-index: 0; transform-origin: 0 50%;
+}
+
+.row {
+  position: absolute; left: var(--margin); right: var(--margin); top: calc(var(--line-y, 61%) + 0.75rem);
+  display: grid; grid-template-columns: 7.4rem 1fr 1fr 1fr; align-items: start;
+  font-size: var(--fs-xs); z-index: 0;
+}
+.row-tags { grid-column: 2; }
+.names { grid-column: 3; justify-self: end; width: 21.5vw; display: flex; flex-direction: column; z-index: 3; position: relative; }
+.name { color: var(--c-dim); transition: color 0.4s var(--ease-out); text-align: left; line-height: 1; }
+.name:hover, .name[aria-current='true'] { color: var(--c-light); }
+.row-cat { justify-self: end; grid-column: 4; }
+.row-num, .row-tags, .row-cat { display: block; }
+
+.intro-text {
+  position: absolute; bottom: var(--margin); left: 50%; transform: translateX(-50%);
+  width: 23rem; max-width: calc(100% - 2 * var(--margin)); text-align: center; z-index: 4;
+  font-size: var(--fs-xxs); font-weight: 700; line-height: 1; pointer-events: none;
+}
+
+.home .foot { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; align-items: end; }
+
+@media (max-width: 767px) {
+  .row, .home .foot { display: none; }
+  .intro-text { width: calc(100% - 2 * var(--margin)); max-width: 26rem; font-size: 0.75rem; }
+}
+
+.is-loading [data-page='home'] .top,
+.is-loading [data-page='home'] .stage,
+.is-loading [data-page='home'] .row,
+.is-loading [data-page='home'] .intro-text,
+.is-loading [data-page='home'] .foot,
+.is-loading [data-page='home'] .work-line { visibility: hidden; }
