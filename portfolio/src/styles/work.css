@@ -3,7 +3,7 @@
   gap: var(--gap);
   max-width: var(--max-width);
   margin-inline: auto;
-  padding: 20rem var(--inset-right) var(--margin) var(--inset-left);
+  padding: 21rem var(--inset-right) var(--margin) var(--inset-left);
 }
 
 .page-top:has(+ .case) {
@@ -40,6 +40,8 @@
 }
 
 .case__about {
+  position: sticky;
+  bottom: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -129,6 +131,7 @@
   }
 
   .case__about {
+    position: static;
     order: -1;
     align-items: flex-start;
   }

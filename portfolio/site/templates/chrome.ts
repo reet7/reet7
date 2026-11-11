@@ -65,8 +65,7 @@ export function picture(
     width="${image.width}"
     height="${image.height}"
     alt="${image.alt}"
-    decoding="async"
-    ${options.eager ? html`fetchpriority="high"` : html`loading="lazy"`}
+    ${options.eager ? html`decoding="sync" fetchpriority="high"` : html`decoding="async" loading="lazy"`}
   />`;
 }
 

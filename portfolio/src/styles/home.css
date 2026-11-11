@@ -83,6 +83,11 @@
   overflow: hidden;
 }
 
+.work__track-inner {
+  position: relative;
+  height: 100%;
+}
+
 .work__track-item {
   position: absolute;
   inset: 0 auto auto 0;
@@ -170,10 +175,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 1px;
-  height: 1px;
   object-fit: cover;
-  transform-origin: 0 0;
   will-change: transform;
 }
 

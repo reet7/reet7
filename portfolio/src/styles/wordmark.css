@@ -2,6 +2,7 @@
   display: flex;
   gap: var(--wordmark-gap);
   height: var(--wordmark-height);
+  overflow: hidden;
   perspective: 1000px;
   pointer-events: none;
   user-select: none;

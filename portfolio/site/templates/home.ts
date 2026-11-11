@@ -5,8 +5,10 @@ import type { Page } from './page.ts';
 import { wordmark } from './wordmark.ts';
 
 function track(name: string, values: readonly string[]): Markup {
-  return html`<div class="work__track work__track--${name}" aria-hidden="true" data-track>
-    ${values.map((value) => html`<span class="work__track-item">${value}</span>`)}
+  return html`<div class="work__track work__track--${name}" aria-hidden="true">
+    <div class="work__track-inner" data-track>
+      ${values.map((value) => html`<span class="work__track-item">${value}</span>`)}
+    </div>
   </div>`;
 }
 
