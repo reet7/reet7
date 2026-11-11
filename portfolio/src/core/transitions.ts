@@ -1,59 +1,57 @@
-import { gsap } from 'gsap';
-import { disposer, qs, reducedMotion } from './env';
-import { haptic } from './haptics';
+const VISITED_KEY = 'visited';
+const FLIGHT_KEY = 'arrival:flight';
 
-type LeaveHandler = (link: HTMLAnchorElement) => Promise<void> | null;
+/**
+ * How this page was reached: `fresh` on the first load of a visit, `soft` when coming from
+ * another page of the site, `flight` when the home card already animated into this layout.
+ */
+export type Arrival = 'fresh' | 'soft' | 'flight';
 
-const handlers: LeaveHandler[] = [];
-let leaving = false;
-
-export function onLeave(fn: LeaveHandler): () => void {
-  handlers.unshift(fn);
-  return () => handlers.splice(handlers.indexOf(fn), 1);
+function read(key: string): string | null {
+  try {
+    return sessionStorage.getItem(key);
+  } catch {
+    return null;
+  }
 }
 
-function veilOut(): Promise<void> {
-  const veil = qs('[data-veil]');
-  if (!veil || reducedMotion()) return Promise.resolve();
-  return new Promise((resolve) => {
-    gsap.to(veil, { opacity: 1, duration: 0.5, ease: 'power2.inOut', onComplete: resolve });
-  });
+function write(key: string, value: string | null): void {
+  try {
+    if (value === null) sessionStorage.removeItem(key);
+    else sessionStorage.setItem(key, value);
+  } catch {
+    // Storage can be blocked (private mode, sandboxed frames); arrivals then always read as fresh.
+  }
 }
 
-export function navigate(link: HTMLAnchorElement): void {
-  if (leaving) return;
-  leaving = true;
-  haptic();
-  const custom = handlers.map((h) => h(link)).find((p) => p !== null);
-  (custom ?? veilOut()).then(() => {
-    window.location.href = link.href;
-  });
+export function resolveArrival(): Arrival {
+  const flight = read(FLIGHT_KEY) !== null;
+  const visited = read(VISITED_KEY) !== null;
+  write(FLIGHT_KEY, null);
+  write(VISITED_KEY, '1');
+  if (flight) return 'flight';
+  return visited ? 'soft' : 'fresh';
 }
 
-function isInternal(a: HTMLAnchorElement, e: MouseEvent): boolean {
-  return (
-    a.origin === window.location.origin &&
-    !a.target &&
-    !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey && e.button === 0 &&
-    a.pathname !== window.location.pathname
+/** Tells the next page that the flight animation already performed the transition. */
+export function announceFlight(): void {
+  write(FLIGHT_KEY, '1');
+}
+
+interface ViewTransitionEvent extends Event {
+  readonly viewTransition?: { skipTransition(): void } | null;
+}
+
+/** Cancels the cross-document view transition for the navigation that is about to happen. */
+export function skipNextViewTransition(): void {
+  window.addEventListener(
+    'pageswap',
+    (event: ViewTransitionEvent) => {
+      event.viewTransition?.skipTransition();
+    },
+    { once: true },
   );
 }
 
-export function initTransitions(): { destroy(): void } {
-  const d = disposer();
-  const veil = qs('[data-veil]');
-  d.on(document, 'click', ((e: MouseEvent) => {
-    const a = (e.target as Element).closest<HTMLAnchorElement>('a[data-link]');
-    if (!a || !isInternal(a, e)) return;
-    e.preventDefault();
-    navigate(a);
-  }) as EventListener);
-  // Restore the page when it comes back from the back/forward cache mid-transition.
-  d.on(window, 'pageshow', ((e: PageTransitionEvent) => {
-    if (!e.persisted) return;
-    leaving = false;
-    if (veil) gsap.set(veil, { opacity: 0 });
-    window.location.reload();
-  }) as EventListener);
-  return { destroy: d.run };
-}
+export const isViewTransitionActive = (): boolean =>
+  'activeViewTransition' in document && document.activeViewTransition != null;

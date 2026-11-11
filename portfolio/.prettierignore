@@ -1,0 +1,9 @@
+dist
+node_modules
+public/generated
+package-lock.json
+/index.html
+/about
+/work
+/privacy-policy
+*.glsl

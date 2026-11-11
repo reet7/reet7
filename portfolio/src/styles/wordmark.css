@@ -1,0 +1,22 @@
+.wordmark {
+  display: flex;
+  gap: var(--wordmark-gap);
+  height: var(--wordmark-height);
+  perspective: 1000px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.wordmark__letter {
+  flex: 1;
+  min-width: 0;
+  transform-origin: 50% 100%;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.wordmark__letter svg {
+  width: 100%;
+  height: 100%;
+  fill: var(--color-light);
+}

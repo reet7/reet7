@@ -1,0 +1,110 @@
+.nav {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  background: var(--color-light);
+  color: var(--color-dark);
+  font-size: var(--text-xs);
+  line-height: 1;
+}
+
+.nav__links {
+  position: absolute;
+  left: 50%;
+  display: flex;
+  gap: 0.25em;
+  transform: translateX(-50%);
+}
+
+.nav__link {
+  display: block;
+  transition: opacity 0.3s;
+}
+
+.nav__link[aria-current] {
+  text-decoration: underline;
+  text-decoration-thickness: var(--hairline);
+  text-underline-offset: 0.1em;
+}
+
+.nav__contact {
+  margin-left: auto;
+}
+
+.nav__progress {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  overflow: hidden;
+  padding: 0 0.5rem;
+  transform: translateY(-50%);
+  font-variant-numeric: tabular-nums;
+}
+
+.roll {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+
+.roll__item {
+  display: block;
+  transition: transform 0.6s var(--ease-roll);
+}
+
+.roll__item--next {
+  position: absolute;
+  top: 0;
+  right: 0;
+  white-space: nowrap;
+  transform: translateY(110%);
+}
+
+.is-rolled .roll__item {
+  transform: translateY(-110%);
+}
+
+.is-rolled .roll__item--next {
+  transform: none;
+}
+
+/* The rolled label is wider than "Contact"; keep it anchored to the visible edge. */
+.footer__links--center .roll__item--next {
+  right: auto;
+  left: 0;
+}
+
+@media (hover: hover) {
+  .nav__link:hover {
+    opacity: 0.5;
+  }
+}
+
+@media (max-width: 767px) {
+  .nav {
+    padding: 0.2rem 0.375rem;
+  }
+
+  .nav__role {
+    display: none;
+  }
+
+  .nav__links {
+    position: static;
+    transform: none;
+  }
+}
+
+@media (max-width: 479px) {
+  .nav {
+    padding: 0.15rem 0.25rem 0.175rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .roll__item {
+    transition-duration: 0.01s;
+  }
+}

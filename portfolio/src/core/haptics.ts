@@ -1,33 +1,40 @@
-type Strength = 'light' | 'medium';
+import { isIOS, media } from './env';
 
-const patterns: Record<Strength, number[]> = { light: [8], medium: [14] };
-let iosSwitch: HTMLLabelElement | null = null;
+const TICK_MS = 8;
 
-function isIOS(): boolean {
-  return /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-}
+let switchLabel: HTMLLabelElement | null = null;
 
-// iOS Safari 17.4+ plays a system haptic when a native switch toggles; clicking its label triggers it programmatically.
-function ensureIosSwitch(): HTMLLabelElement {
-  if (iosSwitch) return iosSwitch;
+/**
+ * iOS has no vibration API, but Safari 17.4+ plays a system haptic when a native
+ * `<input type="checkbox" switch>` toggles. Clicking its label toggles it from script.
+ */
+function iosSwitch(): HTMLLabelElement {
+  if (switchLabel) return switchLabel;
   const label = document.createElement('label');
   label.setAttribute('aria-hidden', 'true');
-  label.style.cssText = 'position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;overflow:hidden;left:-9px;top:-9px';
+  label.style.cssText =
+    'position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none';
   const input = document.createElement('input');
   input.type = 'checkbox';
   input.setAttribute('switch', '');
   input.tabIndex = -1;
   label.append(input);
   document.body.append(label);
-  iosSwitch = label;
+  switchLabel = label;
   return label;
 }
 
-export function haptic(strength: Strength = 'light'): void {
-  if (!window.matchMedia('(pointer: coarse)').matches) return;
-  if (typeof navigator.vibrate === 'function' && !isIOS()) {
-    navigator.vibrate(patterns[strength]);
-    return;
+/** A single light tap on touch devices: vibration on Android, the switch trick on iOS, nothing elsewhere. */
+export function pulse(): void {
+  if (!media.touch.matches) return;
+  if (isIOS()) {
+    iosSwitch().click();
+  } else if (typeof navigator.vibrate === 'function' && navigator.userActivation.hasBeenActive) {
+    navigator.vibrate(TICK_MS);
   }
-  if (isIOS()) ensureIosSwitch().click();
+}
+
+export function destroyHaptics(): void {
+  switchLabel?.remove();
+  switchLabel = null;
 }

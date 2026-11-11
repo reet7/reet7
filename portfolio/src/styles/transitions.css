@@ -1,0 +1,39 @@
+/* Cross-document view transition: the old page lifts and darkens while the new one slides up over it. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-group(root) {
+    animation-duration: 1.2s;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    mix-blend-mode: normal;
+    animation-duration: 1.2s;
+    animation-timing-function: var(--ease);
+    animation-fill-mode: both;
+  }
+
+  ::view-transition-old(root) {
+    animation-name: page-out;
+  }
+
+  ::view-transition-new(root) {
+    animation-name: page-in;
+  }
+}
+
+@keyframes page-out {
+  to {
+    filter: brightness(0.35);
+    transform: translateY(-25%);
+  }
+}
+
+@keyframes page-in {
+  from {
+    transform: translateY(100%);
+  }
+}

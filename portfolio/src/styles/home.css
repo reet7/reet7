@@ -1,55 +1,208 @@
 .home {
-  position: relative; height: 100vh; height: 100svh; overflow: hidden;
-  touch-action: none; overscroll-behavior: none;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100svh;
+  padding: var(--inset-top) var(--inset-right) var(--inset-bottom) var(--inset-left);
+  overflow: hidden;
+  overscroll-behavior: none;
 }
 
-.stage { position: absolute; inset: 0; z-index: 1; }
-.card {
-  position: absolute; left: 50%; top: 0; width: var(--card-w, 20rem); height: var(--card-h, 14rem);
-  will-change: transform, width, height;
-  transform-origin: 50% 50%;
-}
-.card-link { display: block; width: 100%; height: 100%; overflow: hidden; position: relative; background: #151515; }
-.card .cover-svg, .card .cover-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.card .cover-svg { transition: filter 0.6s var(--ease-out); }
-.card:not(.is-active) .cover-svg, .card:not(.is-active) .cover-img { filter: grayscale(1) brightness(0.55) contrast(1.05); }
-.card-link:focus-visible { outline-offset: 4px; }
-.has-gl .card .card-link { background: transparent; }
-.has-gl .card .cover-svg, .has-gl .card .cover-img { opacity: 0; }
-
-.work-line {
-  position: absolute; left: 0; right: 0; top: var(--line-y, 61%);
-  height: 1px; background: var(--c-line); z-index: 0; transform-origin: 0 50%;
+.home__top {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: var(--margin);
+  pointer-events: none;
 }
 
-.row {
-  position: absolute; left: var(--margin); right: var(--margin); top: calc(var(--line-y, 61%) + 0.75rem);
-  display: grid; grid-template-columns: 7.4rem 1fr 1fr 1fr; align-items: start;
-  font-size: var(--fs-xs); z-index: 0;
-}
-.row-tags { grid-column: 2; }
-.names { grid-column: 3; justify-self: end; width: 21.5vw; display: flex; flex-direction: column; z-index: 3; position: relative; }
-.name { color: var(--c-dim); transition: color 0.4s var(--ease-out); text-align: left; line-height: 1; }
-.name:hover, .name[aria-current='true'] { color: var(--c-light); }
-.row-cat { justify-self: end; grid-column: 4; }
-.row-num, .row-tags, .row-cat { display: block; }
-
-.intro-text {
-  position: absolute; bottom: var(--margin); left: 50%; transform: translateX(-50%);
-  width: 23rem; max-width: calc(100% - 2 * var(--margin)); text-align: center; z-index: 4;
-  font-size: var(--fs-xxs); font-weight: 700; line-height: 1; pointer-events: none;
+.home__top .nav {
+  pointer-events: auto;
 }
 
-.home .foot { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; align-items: end; }
-
-@media (max-width: 767px) {
-  .row, .home .foot { display: none; }
-  .intro-text { width: calc(100% - 2 * var(--margin)); max-width: 26rem; font-size: 0.75rem; }
+.home__main {
+  position: absolute;
+  inset: 0;
 }
 
-.is-loading [data-page='home'] .top,
-.is-loading [data-page='home'] .stage,
-.is-loading [data-page='home'] .row,
-.is-loading [data-page='home'] .intro-text,
-.is-loading [data-page='home'] .foot,
-.is-loading [data-page='home'] .work-line { visibility: hidden; }
+.work {
+  position: absolute;
+  inset: 0;
+  touch-action: pinch-zoom;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.work__stage {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.work__stage canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.work__stage.is-pointing {
+  cursor: pointer;
+}
+
+.work__line {
+  position: absolute;
+  top: var(--work-center, 50%);
+  left: var(--inset-left);
+  right: var(--inset-right);
+  z-index: 1;
+  height: var(--hairline);
+  background: var(--color-white-25);
+  transform-origin: left;
+}
+
+.work__info {
+  position: absolute;
+  top: var(--work-center, 50%);
+  left: var(--inset-left);
+  right: var(--inset-right);
+  z-index: 3;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--gap);
+  align-items: start;
+  padding-top: 0.75rem;
+  font-size: var(--text-xs);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.work__track {
+  position: relative;
+  height: 1.3em;
+  overflow: hidden;
+}
+
+.work__track-item {
+  position: absolute;
+  inset: 0 auto auto 0;
+  padding-block: 0.15em;
+  white-space: nowrap;
+  will-change: transform, opacity;
+}
+
+.work__track-item:not(:first-child) {
+  opacity: 0;
+}
+
+.work__track--index {
+  grid-column: 1;
+}
+
+.work__track--tags {
+  grid-column: 2 / span 3;
+}
+
+.work__names {
+  grid-column: 10 / span 2;
+  padding-block: 0.15em;
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+.work__name {
+  overflow: hidden;
+}
+
+.work__name a {
+  display: block;
+  opacity: var(--proximity, 0.22);
+  transition: opacity 0.3s;
+}
+
+.work__track--category {
+  grid-column: 12;
+}
+
+.work__track--category .work__track-item {
+  right: 0;
+  left: auto;
+}
+
+.home__tagline {
+  position: absolute;
+  bottom: var(--inset-bottom);
+  left: 50%;
+  z-index: 4;
+  width: min(23rem, 100% - 2 * var(--margin));
+  transform: translateX(-50%);
+  font-size: var(--text-xxs);
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.home__foot {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-size: var(--text-xs);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.home__mail {
+  opacity: 0.25;
+  transition: opacity 0.3s;
+  pointer-events: auto;
+}
+
+.home__rights {
+  opacity: 0.2;
+}
+
+/* DOM stand-in for the WebGL stage when WebGL is unavailable. */
+.work__slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  object-fit: cover;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+@media (hover: hover) {
+  .work__name a:hover {
+    opacity: max(var(--proximity, 0.22), 0.7);
+  }
+
+  .home__mail:hover {
+    opacity: 1;
+  }
+}
+
+/* Portrait stack: cards only, like the reference's phone and tablet layout. */
+@media (orientation: portrait) and (max-width: 1024px), (max-width: 767px) {
+  .work__info {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .work__line {
+    left: 0;
+    right: 0;
+  }
+
+  .home__foot {
+    display: none;
+  }
+}

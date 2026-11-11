@@ -1,0 +1,94 @@
+.arrow {
+  width: 0.625rem;
+  height: 0.625rem;
+}
+
+/* Underline wipes out to the right, then redraws from the left. */
+.underline-link {
+  position: relative;
+  display: inline-block;
+}
+
+.underline-link::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 -0.15em;
+  height: var(--hairline);
+  background: currentcolor;
+  transform-origin: left;
+  transition: transform 0.5s var(--ease) 0.3s;
+}
+
+@media (hover: hover) {
+  .underline-link:hover::after {
+    transform: scaleX(0);
+    transform-origin: right;
+    transition-delay: 0s;
+  }
+}
+
+.scroll-hint {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: var(--text-xxs);
+  line-height: 1;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+.scroll-hint__mask {
+  position: relative;
+  display: block;
+  height: 1em;
+  overflow: hidden;
+}
+
+.scroll-hint__arrow {
+  display: block;
+}
+
+.scroll-hint__arrow + .scroll-hint__arrow {
+  position: absolute;
+  top: -200%;
+  left: 0;
+}
+
+/* A block rises behind the link on hover while the arrow swaps diagonally. */
+.fill-link {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  min-height: 1.1em;
+  isolation: isolate;
+}
+
+.fill-link::before {
+  content: '';
+  position: absolute;
+  inset: -0.1em -0.25rem;
+  z-index: -1;
+  background: var(--color-light);
+  clip-path: inset(var(--fill-top, 100%) 0 var(--fill-bottom, 0%) 0);
+}
+
+.fill-link__arrows {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+
+.fill-link__arrows .arrow + .arrow {
+  position: absolute;
+  inset: 0;
+  transform: translate(-100%, 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .underline-link::after {
+    transition-duration: 0.01s;
+    transition-delay: 0s;
+  }
+}

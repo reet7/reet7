@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://reet7.vercel.app/sitemap.xml

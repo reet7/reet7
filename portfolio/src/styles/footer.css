@@ -1,0 +1,111 @@
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--margin);
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding: var(--margin) var(--inset-right) var(--inset-bottom) var(--inset-left);
+}
+
+.footer__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--margin);
+  border-top: var(--hairline) solid var(--color-white-25);
+  font-size: var(--text-xxs);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.footer__links {
+  flex: 1;
+}
+
+.footer__links--center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer__links--end {
+  text-align: right;
+}
+
+.footer__link {
+  display: inline-block;
+  text-transform: inherit;
+  transition: opacity 0.3s;
+}
+
+.footer__logo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.footer__logo-clip {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 12vw;
+  max-height: calc(var(--max-width) * 0.12);
+  overflow: hidden;
+}
+
+/* The upper rows only show their bottom slice, like echoes of the full wordmark. */
+.footer__logo-clip--far {
+  height: 2.75vw;
+}
+
+.footer__logo-clip--near {
+  height: 5.5vw;
+}
+
+.wordmark--footer {
+  flex: none;
+  height: 12vw;
+  max-height: calc(var(--max-width) * 0.12);
+}
+
+@media (hover: hover) {
+  .footer__link:hover {
+    opacity: 0.75;
+  }
+}
+
+@media (max-width: 991px) {
+  .footer__logo-clip:not(.footer__logo-clip--far, .footer__logo-clip--near),
+  .wordmark--footer {
+    height: 16vw;
+  }
+}
+
+@media (max-width: 767px) {
+  .footer__logo-clip:not(.footer__logo-clip--far, .footer__logo-clip--near),
+  .wordmark--footer {
+    height: 13vw;
+  }
+}
+
+@media (max-width: 479px) {
+  .footer {
+    gap: 12rem;
+  }
+
+  .footer__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.1rem 0.5rem;
+    align-items: start;
+  }
+
+  .footer__links--center {
+    align-items: flex-start;
+  }
+
+  .footer__links--end {
+    grid-column: 1;
+    text-align: left;
+  }
+}
