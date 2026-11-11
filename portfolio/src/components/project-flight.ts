@@ -71,7 +71,7 @@ function revealPage(timeline: gsap.core.Timeline, overlay: HTMLElement): void {
     )
     .from(fades, { opacity: 0, duration: 0.8, ease: 'power2.out' }, REVEAL_AT + 0.2);
   texts.forEach((text, index) => {
-    const split = SplitText.create(text, { type: 'lines', mask: 'lines' });
+    const split = SplitText.create(text, { type: 'lines', mask: 'lines', linesClass: 'line' });
     timeline.from(
       split.lines,
       { yPercent: 110, duration: 1.1, ease: 'power4.out', stagger: 0.06 },

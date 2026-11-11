@@ -66,7 +66,7 @@ function revealDetails(timeline: gsap.core.Timeline, elements: IntroElements, at
     .to(foot, { opacity: 1, duration: 0.8, ease: 'power2.out' }, at + 0.8);
   if (!tagline) return;
   timeline.add(() => {
-    const split = SplitText.create(tagline, { type: 'lines', mask: 'lines' });
+    const split = SplitText.create(tagline, { type: 'lines', mask: 'lines', linesClass: 'line' });
     gsap.set(tagline, { opacity: 1 });
     gsap.from(split.lines, {
       yPercent: 110,

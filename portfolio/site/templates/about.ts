@@ -122,12 +122,12 @@ export const aboutPage: Page = {
             <header class="hero__top" data-hero-top>
               ${wordmark(about.title)} ${nav(context.root, 'about')}
             </header>
-            <div class="poster" data-poster>
-              ${posterFace('front', about.poster.front)} ${posterFace('back', about.poster.back)}
-            </div>
             ${scrollHint()}
           </section>
           <section class="statements" aria-label="Profile" data-statements>
+            <div class="poster" data-poster>
+              ${posterFace('front', about.poster.front)} ${posterFace('back', about.poster.back)}
+            </div>
             ${statement(1, first, 'lead')}
             <div class="statements__second">
               ${statement(2, second, 'narrow')}
@@ -138,6 +138,7 @@ export const aboutPage: Page = {
           </section>
         </div>
         <section class="drum" aria-label="Services" data-drum>
+          <div class="drum__stage" aria-hidden="true" data-drum-stage></div>
           <ul class="drum__list" data-drum-list>
             ${about.services.map((service) => html`<li>${service}</li>`)}
           </ul>

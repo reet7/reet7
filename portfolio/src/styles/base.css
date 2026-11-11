@@ -143,6 +143,8 @@ main:focus {
   padding: var(--inset-top) var(--inset-right) 0 var(--inset-left);
 }
 
+/* Masked split lines: room for descenders that the tight display line-height would clip. */
 .line-mask {
-  overflow: hidden;
+  margin-bottom: -0.14em;
+  padding-bottom: 0.14em;
 }

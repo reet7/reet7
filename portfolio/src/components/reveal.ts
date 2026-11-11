@@ -80,7 +80,7 @@ export function initReveals(
       },
     });
 
-    gsap.set(fades, { opacity: 0 });
+    if (fades.length > 0) gsap.set(fades, { opacity: 0 });
     ScrollTrigger.batch(fades, {
       start: START,
       once: true,
@@ -91,7 +91,7 @@ export function initReveals(
 
     const phone = media.phone.matches;
     const shift = window.innerHeight * (phone ? 0.02 : 0.08);
-    gsap.set(mediaItems, { opacity: 0, y: shift });
+    if (mediaItems.length > 0) gsap.set(mediaItems, { opacity: 0, y: shift });
     ScrollTrigger.batch(mediaItems, {
       start: phone ? 'top 80%' : 'top 100%',
       once: true,
