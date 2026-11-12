@@ -53,5 +53,14 @@ export function skipNextViewTransition(): void {
   );
 }
 
-export const isViewTransitionActive = (): boolean =>
-  'activeViewTransition' in document && document.activeViewTransition != null;
+/**
+ * Whether this page is currently being revealed by a view transition. Reading the transition
+ * exposes its promises, which reject if the browser aborts it, so those are handled here.
+ */
+export function isViewTransitionActive(): boolean {
+  const transition = 'activeViewTransition' in document ? document.activeViewTransition : null;
+  if (!transition) return false;
+  transition.ready.catch(() => undefined);
+  transition.finished.catch(() => undefined);
+  return true;
+}

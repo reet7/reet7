@@ -18,6 +18,18 @@ export interface RendererHandle {
   resize(width: number, height: number, pixelRatio?: number): void;
 }
 
+let webglSupport: boolean | null = null;
+
+/** Probes for WebGL once, quietly, so unsupported browsers never reach a failing constructor. */
+export function isWebGLAvailable(): boolean {
+  if (webglSupport === null) {
+    const context = document.createElement('canvas').getContext('webgl2');
+    webglSupport = context !== null;
+    context?.getExtension('WEBGL_lose_context')?.loseContext();
+  }
+  return webglSupport;
+}
+
 /**
  * Creates a renderer inside `container`, or returns `null` when WebGL is unavailable so
  * callers can fall back to DOM. Context loss is survived rather than treated as fatal.
@@ -32,6 +44,7 @@ export function createRenderer(
     onRestore,
   }: RendererOptions = {},
 ): RendererHandle | null {
+  if (!isWebGLAvailable()) return null;
   let renderer: WebGLRenderer;
   try {
     renderer = new WebGLRenderer({
